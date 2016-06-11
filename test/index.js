@@ -65,7 +65,7 @@ describe('updateChildren', () => {
 	jsdom();
 
 	it('can add an element', () => {
-		const root = document.createElement('div');
+		const root = $c('div');
 		const domA = null;
 		const domB = h('div', null);
 
@@ -75,7 +75,7 @@ describe('updateChildren', () => {
 	});
 
 	it('can add several elements', () => {
-		const root = document.createElement('div');
+		const root = $c('div');
 		const domA = null;
 		const domB = [
 			h('div', null),
@@ -89,8 +89,8 @@ describe('updateChildren', () => {
 	});
 
 	it('can remove an element', () => {
-		const root = document.createElement('div');
-		root.appendChild(document.createElement('div'));
+		const root = $c('div');
+		root.appendChild($c('div'));
 		const domA = h('div', null);
 		const domB = null;
 
@@ -99,7 +99,7 @@ describe('updateChildren', () => {
 	});
 
 	it('can add a text child node', () => {
-		const root = document.createElement('div');
+		const root = $c('div');
 		const domA = [];
 		const domB = ['txt'];
 
@@ -110,8 +110,8 @@ describe('updateChildren', () => {
 	});
 
 	it('can update a text child node', () => {
-		const root = document.createElement('div');
-		root.appendChild(document.createTextNode('txt'));
+		const root = $c('div');
+		root.appendChild($t('txt'));
 		const domA = 'txt';
 		const domB = 'text';
 
@@ -121,39 +121,54 @@ describe('updateChildren', () => {
 		expect(root.childNodes[0].textContent).to.be.eql('text');
 	});
 
-	xit('can remove a text child node', () => {
-		const domA = h('div', {}, 'txt');
-		const domB = h('div', {});
+	it('can remove a text child node', () => {
+		const root = $c('div');
+		root.appendChild($t('txt'));
+		const domA = 'txt';
+		const domB = null;
 
-		expect(diffNode(domA, domB)).to.be.eql([
-			RemoveChild(0)
-		]);
+		updateChildren(root, domA, domB);
+		expect(root.childNodes.length).to.be.eql(0);
 	});
 
-	xit('can add an attribute', () => {
+	it('can add an attribute', () => {
+		const root = $c('div');
+		root.appendChild($c('div'));
 		const domA = h('div', {});
-		const domB = h('div', {'class': 'testclass'});
+		const domB = h('div', {class: 'testclass'});
 
-		expect(diffNode(domA, domB)).to.be.eql([
-			SetAttribute('class', 'testclass')
-		]);
+		updateChildren(root, domA, domB);
+		expect(root.childNodes[0].attributes.length).to.be.eql(1);
+		expect(root.childNodes[0].getAttribute('class')).to.be.eql('testclass');
 	});
 
-	xit('can update an attribute', () => {
-		const domA = h('div', {'class': 'testclass'});
-		const domB = h('div', {'class': 'anotherclass'});
+	it('can update an attribute', () => {
+		const root = $c('div');
+		root.appendChild($c('div'));
+		const domA = h('div', {class: 'testclass'});
+		const domB = h('div', {class: 'anotherclass'});
 
-		expect(diffNode(domA, domB)).to.be.eql([
-			SetAttribute('class', 'anotherclass')
-		]);
+		updateChildren(root, domA, domB);
+		expect(root.childNodes[0].attributes.length).to.be.eql(1);
+		expect(root.childNodes[0].getAttribute('class')).to.be.eql('anotherclass');
 	});
 
-	xit('can remove an attribute', () => {
-		const domA = h('div', {'class': 'testclass'});
+	it('can remove an attribute', () => {
+		const root = $c('div');
+		root.appendChild($c('div'));
+		const domA = h('div', {class: 'testclass'});
 		const domB = h('div', {});
 
-		expect(diffNode(domA, domB)).to.be.eql([
-			RemoveAttribute('class')
-		]);
+		updateChildren(root, domA, domB);
+		expect(root.childNodes[0].attributes.length).to.be.eql(0);
 	});
 });
+
+
+function $c(name) {
+	return document.createElement(name);
+}
+
+function $t(name) {
+	return document.createTextNode(name);
+}
