@@ -1,5 +1,7 @@
 # update-element-children
 
+[![Build Status](https://travis-ci.org/download13/update-element-children.svg?branch=master)](https://travis-ci.org/download13/update-element-children)
+
 Unlike most other virtual doms, this one is intended to operate on the children of an existing [HTMLElement](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement).
 
 ## Examples:
