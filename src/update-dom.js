@@ -1,93 +1,75 @@
-import diffList, {CREATE, UPDATE, MOVE, REMOVE} from 'dift';
-import {createRealDomNode} from './to-dom';
-import {ensureArray} from './util';
-
-
-export function updateChildren(parentNode, oldVNodes, newVNodes) {
-	oldVNodes = comparableVNodes(ensureArray(oldVNodes));
-	newVNodes = comparableVNodes(ensureArray(newVNodes));
-
-	diffList(oldVNodes, newVNodes, (editType, old, next, index) => {
-		//console.log('listdiff', editType, old, next, index);
-		repositionNode(parentNode, editType, old, next, index);
-	}, a => a.key);
+import diffList, { CREATE, UPDATE, MOVE, REMOVE } from 'dift';
+import { createRealDomNode } from './to-dom';
+import { ensureArray, clone } from './util';
+import { sanitizeChildren } from './h';
+import { isVElement, isVTextNode } from './types';
+export function updateChildren(parentNode, oldChildren, newChildren) {
+    var oldVNodes = sanitizeChildren(ensureArray(oldChildren));
+    var newVNodes = sanitizeChildren(ensureArray(newChildren));
+    updateChildrenInternal(parentNode, oldVNodes, newVNodes);
 }
-
-function repositionNode(parentNode, editType, oldItem, newItem, index) {
-	const node = parentNode.childNodes[index] || null;
-
-	switch(editType) {
-		case CREATE:
-			parentNode.insertBefore(
-				createRealDomNode(newItem.vnode),
-				node
-			);
-			break;
-		case UPDATE:
-			updateNode(node, oldItem.vnode, newItem.vnode);
-			break;
-		case MOVE:
-			const oldNode = parentNode.childNodes[oldItem.index];
-			parentNode.insertBefore(
-				updateNode(oldNode, oldItem.vnode, newItem.vnode),
-				node
-			);
-			break;
-		case REMOVE:
-			parentNode.removeChild(node);
-			break;
-	}
+function updateChildrenInternal(parentNode, oldVNodes, newVNodes) {
+    diffList(oldVNodes, newVNodes, function (editType, old, next, index) {
+        repositionNode(parentNode, editType, old, next, index);
+    }, getKey);
 }
-
+function getKey(item) {
+    if (isVElement(item)) {
+        var key = item.props['key'];
+        if (typeof key === 'string')
+            return key;
+        return item.name + '_' + item.index.toString();
+    }
+    return '#text_' + item.index.toString();
+}
+function repositionNode(parentNode, editType, oldVNode, newVNode, index) {
+    var indexNode = parentNode.childNodes[index] || null;
+    switch (editType) {
+        case CREATE:
+            parentNode.insertBefore(createRealDomNode(newVNode), indexNode);
+            break;
+        case UPDATE:
+            updateNode(indexNode, oldVNode, newVNode);
+            break;
+        case MOVE:
+            var oldNodeMove = parentNode.childNodes[oldVNode.index];
+            parentNode.insertBefore(updateNode(oldNodeMove, oldVNode, newVNode), indexNode);
+            break;
+        case REMOVE:
+            var oldNodeRemove = parentNode.childNodes[oldVNode.index];
+            parentNode.removeChild(oldNodeRemove);
+            break;
+    }
+}
 function updateNode(oldNode, oldVNode, newVNode) {
-	console.log('updateNode', oldVNode, newVNode)
-	if(
-		(oldVNode === null && newVNode !== null)
-		|| (oldVNode !== null && newVNode === null)
-		|| (typeof oldVNode !== typeof newVNode)
-		|| (oldVNode.type !== newVNode.type)
-	) {
-		const newNode = createRealDomNode(newVNode);
-		console.log('new', oldNode, newNode)
-		oldNode.parentNode.replaceChild(
-			newNode,
-			oldNode
-		);
-		return newNode;
-	} else if(newVNode.type) {
-		updateProps(oldNode, oldVNode, newVNode);
-		updateChildren(oldNode, oldVNode.children, newVNode.children);
-	} else if(typeof newVNode === 'string') {
-		oldNode.textContent = newVNode;
-	}
-
-	return oldNode;
+    if (oldNode instanceof Text && isVTextNode(newVNode)) {
+        return updateText(oldNode, newVNode);
+    }
+    if (oldNode instanceof HTMLElement && isVElement(oldVNode) && isVElement(newVNode)) {
+        return updateElement(oldNode, oldVNode, newVNode);
+    }
+    console.error('updateNode error', oldNode, oldVNode, newVNode);
+    throw new Error('This should never happen');
 }
-
-function updateProps(node, oldVNode, newVNode) {
-	const oldProps = {...oldVNode.props};
-	const newProps = {...newVNode.props};
-
-	for(let name in newProps) {
-		if(newProps[name] !== oldProps[name]) {
-			node[name] = newProps[name];
-		}
-		delete oldProps[name];
-	}
-
-	for(let name in oldProps) {
-		delete node[name];
-	}
-
-	return node;
+function updateText(oldNode, newVNode) {
+    oldNode.textContent = newVNode.text;
+    return oldNode;
 }
-
-function comparableVNodes(vnodes) {
-	return vnodes.map((vnode, i) => {
-		return {
-			key: ((vnode && vnode.props && vnode.props.key) || i).toString(),
-			vnode,
-			index: i
-		};
-	});
+function updateElement(oldNode, oldVNode, newVNode) {
+    updateProps(oldNode, oldVNode, newVNode);
+    updateChildrenInternal(oldNode, oldVNode.children, newVNode.children);
+    return oldNode;
+}
+function updateProps(element, oldVNode, newVNode) {
+    var oldProps = clone(oldVNode.props);
+    var newProps = clone(newVNode.props);
+    for (var name_1 in newProps) {
+        if (newProps[name_1] !== oldProps[name_1]) {
+            element[name_1] = newProps[name_1];
+        }
+        delete oldProps[name_1];
+    }
+    for (var name_2 in oldProps) {
+        delete element[name_2];
+    }
 }

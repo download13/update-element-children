@@ -7,7 +7,8 @@ describe('h', () => {
 	it('creates a vnode', () => {
 		const vnode = h('div', null);
 		expect(vnode).to.be.eql({
-			type: 'div',
+			type: 'element',
+			name: 'div',
 			props: {},
 			children: []
 		});
@@ -15,33 +16,47 @@ describe('h', () => {
 	it('creates nested vnodes', () => {
 		const vnode = h('div', null, h('span'));
 		expect(vnode).to.be.eql({
-			type: 'div',
+			type: 'element',
+			name: 'div',
 			props: {},
-			children: [{type: 'span', props: {}, children: []}]
+			children: [{
+				type: 'element',
+				name: 'span',
+				props: {},
+				children: [],
+				index: 0
+			}]
 		});
 	});
 	it('creates nested vnodes with string children', () => {
 		const vnode = h('div', null, 'teststring');
 		expect(vnode).to.be.eql({
-			type: 'div',
+			type: 'element',
+			name: 'div',
 			props: {},
-			children: ['teststring']
+			children: [{
+				type: 'text',
+				text: 'teststring',
+				index: 0
+			}]
 		});
 	});
 	it('creates nested vnodes with null children', () => {
 		const vnode = h('div', null, null);
 		expect(vnode).to.be.eql({
-			type: 'div',
+			type: 'element',
+			name: 'div',
 			props: {},
-			children: [null]
+			children: []
 		});
 	});
 	it('creates nested vnodes with undefined children', () => {
 		const vnode = h('div', null, undefined);
 		expect(vnode).to.be.eql({
-			type: 'div',
+			type: 'element',
+			name: 'div',
 			props: {},
-			children: [null]
+			children: []
 		});
 	});
 });
@@ -59,6 +74,20 @@ describe('updateChildren', () => {
 		expect(root.childNodes[0].localName).to.be.eql('div');
 	});
 
+	it('can add several elements', () => {
+		const root = document.createElement('div');
+		const domA = null;
+		const domB = [
+			h('div', null),
+			h('span')
+		];
+
+		updateChildren(root, domA, domB);
+		expect(root.childNodes.length).to.be.eql(2);
+		expect(root.childNodes[0].localName).to.be.eql('div');
+		expect(root.childNodes[1].localName).to.be.eql('span');
+	});
+
 	it('can remove an element', () => {
 		const root = document.createElement('div');
 		root.appendChild(document.createElement('div'));
@@ -69,24 +98,27 @@ describe('updateChildren', () => {
 		expect(root.childNodes.length).to.be.eql(0);
 	});
 
-	xit('can add a text child node', () => {
-		const domA = h('div', {});
-		const domB = h('div', {}, 'txt');
+	it('can add a text child node', () => {
+		const root = document.createElement('div');
+		const domA = [];
+		const domB = ['txt'];
 
-		//console.log(54, diffNode(domA, domB));
-		expect(diffNode(domA, domB)).to.be.eql([
-			InsertChild(VNode.Text('txt'), 0)
-		]);
+		updateChildren(root, domA, domB);
+		expect(root.childNodes.length).to.be.eql(1);
+		expect(root.childNodes[0].nodeName).to.be.eql('#text');
+		expect(root.childNodes[0].textContent).to.be.eql('txt');
 	});
 
-	xit('can update a text child node', () => {
-		const domA = h('div', {}, 'txt');
-		const domB = h('div', {}, 'text');
+	it('can update a text child node', () => {
+		const root = document.createElement('div');
+		root.appendChild(document.createTextNode('txt'));
+		const domA = 'txt';
+		const domB = 'text';
 
-		// TODO: Need keys
-		expect(diffNode(domA, domB)).to.be.eql([
-			UpdateChild(VNode.Text('text'))
-		]);
+		updateChildren(root, domA, domB);
+		expect(root.childNodes.length).to.be.eql(1);
+		expect(root.childNodes[0].nodeName).to.be.eql('#text');
+		expect(root.childNodes[0].textContent).to.be.eql('text');
 	});
 
 	xit('can remove a text child node', () => {

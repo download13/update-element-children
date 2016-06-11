@@ -53,7 +53,7 @@ module.exports =
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -61,94 +61,34 @@ module.exports =
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_dift__ = __webpack_require__(5);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_dift___default = __WEBPACK_IMPORTED_MODULE_0_dift__ && __WEBPACK_IMPORTED_MODULE_0_dift__.__esModule ? function() { return __WEBPACK_IMPORTED_MODULE_0_dift__['default'] } : function() { return __WEBPACK_IMPORTED_MODULE_0_dift__; };
-	/* harmony import */ __webpack_require__.d(__WEBPACK_IMPORTED_MODULE_0_dift___default, 'a', __WEBPACK_IMPORTED_MODULE_0_dift___default);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__to_dom__ = __webpack_require__(2);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__util__ = __webpack_require__(3);
-	/* harmony export */ exports["a"] = updateChildren;var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
-
-
-
-
-	function updateChildren(parentNode, oldVNodes, newVNodes) {
-		oldVNodes = comparableVNodes(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__util__["a" /* ensureArray */])(oldVNodes));
-		newVNodes = comparableVNodes(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__util__["a" /* ensureArray */])(newVNodes));
-
-		__WEBPACK_IMPORTED_MODULE_0_dift___default()(oldVNodes, newVNodes, function (editType, old, next, index) {
-			//console.log('listdiff', editType, old, next, index);
-			repositionNode(parentNode, editType, old, next, index);
-		}, function (a) {
-			return a.key;
-		});
+	/* harmony export */ exports["b"] = h;/* harmony export */ exports["a"] = sanitizeChildren;function h(name, props) {
+	    var children = [];
+	    for (var _i = 2; _i < arguments.length; _i++) {
+	        children[_i - 2] = arguments[_i];
+	    }
+	    return {
+	        type: 'element',
+	        name: name,
+	        props: props || {},
+	        children: children.filter(truthy).map(childToVNode)
+	    };
 	}
-
-	function repositionNode(parentNode, editType, oldItem, newItem, index) {
-		var node = parentNode.childNodes[index] || null;
-
-		switch (editType) {
-			case __WEBPACK_IMPORTED_MODULE_0_dift__["CREATE"]:
-				parentNode.insertBefore(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__to_dom__["a" /* createRealDomNode */])(newItem.vnode), node);
-				break;
-			case __WEBPACK_IMPORTED_MODULE_0_dift__["UPDATE"]:
-				updateNode(node, oldItem.vnode, newItem.vnode);
-				break;
-			case __WEBPACK_IMPORTED_MODULE_0_dift__["MOVE"]:
-				var oldNode = parentNode.childNodes[oldItem.index];
-				parentNode.insertBefore(updateNode(oldNode, oldItem.vnode, newItem.vnode), node);
-				break;
-			case __WEBPACK_IMPORTED_MODULE_0_dift__["REMOVE"]:
-				parentNode.removeChild(node);
-				break;
-		}
+	function sanitizeChildren(children) {
+	    return children.filter(truthy).map(childToVNode);
 	}
-
-	function updateNode(oldNode, oldVNode, newVNode) {
-		console.log('updateNode', oldVNode, newVNode);
-		if (oldVNode === null && newVNode !== null || oldVNode !== null && newVNode === null || (typeof oldVNode === 'undefined' ? 'undefined' : _typeof(oldVNode)) !== (typeof newVNode === 'undefined' ? 'undefined' : _typeof(newVNode)) || oldVNode.type !== newVNode.type) {
-			var newNode = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__to_dom__["a" /* createRealDomNode */])(newVNode);
-			console.log('new', oldNode, newNode);
-			oldNode.parentNode.replaceChild(newNode, oldNode);
-			return newNode;
-		} else if (newVNode.type) {
-			updateProps(oldNode, oldVNode, newVNode);
-			updateChildren(oldNode, oldVNode.children, newVNode.children);
-		} else if (typeof newVNode === 'string') {
-			oldNode.textContent = newVNode;
-		}
-
-		return oldNode;
+	function childToVNode(child, i) {
+	    if (typeof child === 'string') {
+	        return {
+	            type: 'text',
+	            text: child,
+	            index: i
+	        };
+	    }
+	    child.index = i;
+	    return child;
 	}
-
-	function updateProps(node, oldVNode, newVNode) {
-		var oldProps = _extends({}, oldVNode.props);
-		var newProps = _extends({}, newVNode.props);
-
-		for (var name in newProps) {
-			if (newProps[name] !== oldProps[name]) {
-				node[name] = newProps[name];
-			}
-			delete oldProps[name];
-		}
-
-		for (var _name in oldProps) {
-			delete node[_name];
-		}
-
-		return node;
-	}
-
-	function comparableVNodes(vnodes) {
-		return vnodes.map(function (vnode, i) {
-			return {
-				key: (vnode && vnode.props && vnode.props.key || i).toString(),
-				vnode: vnode,
-				index: i
-			};
-		});
+	function truthy(a) {
+	    return !!a;
 	}
 
 /***/ },
@@ -156,25 +96,11 @@ module.exports =
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__update_dom__ = __webpack_require__(0);
-	/* harmony export */ exports["h"] = h;/* harmony reexport */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_0__update_dom__, "a")) __webpack_require__.d(exports, "updateChildren", function() { return __WEBPACK_IMPORTED_MODULE_0__update_dom__["a"]; });
-
-
-	function h(type, props) {
-		for (var _len = arguments.length, children = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
-			children[_key - 2] = arguments[_key];
-		}
-
-		return {
-			type: type,
-			props: props || {},
-			children: children.map(normalizeChild)
-		};
+	/* harmony export */ exports["a"] = isVTextNode;/* harmony export */ exports["b"] = isVElement;function isVTextNode(a) {
+	    return a.type === 'text';
 	}
-
-	function normalizeChild(child) {
-		if (child === undefined) return null;
-		return child;
+	function isVElement(a) {
+	    return a.type === 'element';
 	}
 
 /***/ },
@@ -182,23 +108,86 @@ module.exports =
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	/* harmony export */ exports["a"] = createRealDomNode;function createRealDomNode(vnode) {
-		var doc = arguments.length <= 1 || arguments[1] === undefined ? document : arguments[1];
+	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_dift__ = __webpack_require__(7);
+	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_dift___default = __WEBPACK_IMPORTED_MODULE_0_dift__ && __WEBPACK_IMPORTED_MODULE_0_dift__.__esModule ? function() { return __WEBPACK_IMPORTED_MODULE_0_dift__['default'] } : function() { return __WEBPACK_IMPORTED_MODULE_0_dift__; };
+	/* harmony import */ __webpack_require__.d(__WEBPACK_IMPORTED_MODULE_0_dift___default, 'a', __WEBPACK_IMPORTED_MODULE_0_dift___default);
+	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__to_dom__ = __webpack_require__(4);
+	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__util__ = __webpack_require__(5);
+	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__h__ = __webpack_require__(0);
+	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__types__ = __webpack_require__(1);
+	/* harmony export */ exports["a"] = updateChildren;
 
-		if (typeof vnode === 'string') {
-			return doc.createTextNode(vnode);
-		}
 
-		var node = doc.createElement(vnode.type);
-		populateAttributes(node, vnode.props);
-		vnode.children.map(createRealDomNode).forEach(node.appendChild.bind(node));
-		return node;
+
+
+	function updateChildren(parentNode, oldChildren, newChildren) {
+	    var oldVNodes = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__h__["a" /* sanitizeChildren */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__util__["a" /* ensureArray */])(oldChildren));
+	    var newVNodes = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__h__["a" /* sanitizeChildren */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__util__["a" /* ensureArray */])(newChildren));
+	    updateChildrenInternal(parentNode, oldVNodes, newVNodes);
 	}
-
-	function populateAttributes(node, props) {
-		for (var key in props) {
-			node[name] = props[name];
-		}
+	function updateChildrenInternal(parentNode, oldVNodes, newVNodes) {
+	    __WEBPACK_IMPORTED_MODULE_0_dift___default()(oldVNodes, newVNodes, function (editType, old, next, index) {
+	        repositionNode(parentNode, editType, old, next, index);
+	    }, getKey);
+	}
+	function getKey(item) {
+	    if (__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4__types__["b" /* isVElement */])(item)) {
+	        var key = item.props['key'];
+	        if (typeof key === 'string') return key;
+	        return item.name + '_' + item.index.toString();
+	    }
+	    return '#text_' + item.index.toString();
+	}
+	function repositionNode(parentNode, editType, oldVNode, newVNode, index) {
+	    var indexNode = parentNode.childNodes[index] || null;
+	    switch (editType) {
+	        case __WEBPACK_IMPORTED_MODULE_0_dift__["CREATE"]:
+	            parentNode.insertBefore(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__to_dom__["a" /* createRealDomNode */])(newVNode), indexNode);
+	            break;
+	        case __WEBPACK_IMPORTED_MODULE_0_dift__["UPDATE"]:
+	            updateNode(indexNode, oldVNode, newVNode);
+	            break;
+	        case __WEBPACK_IMPORTED_MODULE_0_dift__["MOVE"]:
+	            var oldNodeMove = parentNode.childNodes[oldVNode.index];
+	            parentNode.insertBefore(updateNode(oldNodeMove, oldVNode, newVNode), indexNode);
+	            break;
+	        case __WEBPACK_IMPORTED_MODULE_0_dift__["REMOVE"]:
+	            var oldNodeRemove = parentNode.childNodes[oldVNode.index];
+	            parentNode.removeChild(oldNodeRemove);
+	            break;
+	    }
+	}
+	function updateNode(oldNode, oldVNode, newVNode) {
+	    if (oldNode instanceof Text && __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4__types__["a" /* isVTextNode */])(newVNode)) {
+	        return updateText(oldNode, newVNode);
+	    }
+	    if (oldNode instanceof HTMLElement && __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4__types__["b" /* isVElement */])(oldVNode) && __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4__types__["b" /* isVElement */])(newVNode)) {
+	        return updateElement(oldNode, oldVNode, newVNode);
+	    }
+	    console.error('updateNode error', oldNode, oldVNode, newVNode);
+	    throw new Error('This should never happen');
+	}
+	function updateText(oldNode, newVNode) {
+	    oldNode.textContent = newVNode.text;
+	    return oldNode;
+	}
+	function updateElement(oldNode, oldVNode, newVNode) {
+	    updateProps(oldNode, oldVNode, newVNode);
+	    updateChildrenInternal(oldNode, oldVNode.children, newVNode.children);
+	    return oldNode;
+	}
+	function updateProps(element, oldVNode, newVNode) {
+	    var oldProps = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__util__["b" /* clone */])(oldVNode.props);
+	    var newProps = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__util__["b" /* clone */])(newVNode.props);
+	    for (var name_1 in newProps) {
+	        if (newProps[name_1] !== oldProps[name_1]) {
+	            element[name_1] = newProps[name_1];
+	        }
+	        delete oldProps[name_1];
+	    }
+	    for (var name_2 in oldProps) {
+	        delete element[name_2];
+	    }
 	}
 
 /***/ },
@@ -206,13 +195,60 @@ module.exports =
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	/* harmony export */ exports["a"] = ensureArray;function ensureArray(a) {
-		if (Array.isArray(a)) return a;
-		return [a];
-	}
+	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__update_dom__ = __webpack_require__(2);
+	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__h__ = __webpack_require__(0);
+	/* harmony reexport */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_0__update_dom__, "a")) __webpack_require__.d(exports, "updateChildren", function() { return __WEBPACK_IMPORTED_MODULE_0__update_dom__["a"]; });
+	/* harmony reexport */ if(__webpack_require__.o(__WEBPACK_IMPORTED_MODULE_1__h__, "b")) __webpack_require__.d(exports, "h", function() { return __WEBPACK_IMPORTED_MODULE_1__h__["b"]; });
+
+
 
 /***/ },
 /* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__types__ = __webpack_require__(1);
+	/* harmony export */ exports["a"] = createRealDomNode;
+	function createRealDomNode(vnode, doc) {
+	    if (doc === void 0) {
+	        doc = document;
+	    }
+	    if (__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__types__["a" /* isVTextNode */])(vnode)) {
+	        return doc.createTextNode(vnode.text);
+	    }
+	    var element = doc.createElement(vnode.name);
+	    populateAttributes(element, vnode.props);
+	    vnode.children.map(function (vnode) {
+	        return createRealDomNode(vnode);
+	    }).forEach(element.appendChild.bind(element));
+	    return element;
+	}
+	function populateAttributes(element, props) {
+	    for (var key in props) {
+	        element[name] = props[name];
+	    }
+	}
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	/* harmony export */ exports["a"] = ensureArray;/* harmony export */ exports["b"] = clone;function ensureArray(a) {
+	    if (Array.isArray(a)) return a;
+	    if (a) return [a];
+	    return [];
+	}
+	function clone(a) {
+	    var r = {};
+	    for (var key in a) {
+	        r[key] = a[key];
+	    }
+	    return r;
+	}
+
+/***/ },
+/* 6 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -266,7 +302,7 @@ module.exports =
 	exports.getBit = getBit;
 
 /***/ },
-/* 5 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -277,7 +313,7 @@ module.exports =
 	});
 	exports.REMOVE = exports.MOVE = exports.UPDATE = exports.CREATE = undefined;
 
-	var _bitVector = __webpack_require__(4);
+	var _bitVector = __webpack_require__(6);
 
 	/**
 	 * Actions
