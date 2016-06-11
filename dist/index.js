@@ -181,12 +181,20 @@ module.exports =
 	    var newProps = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__util__["b" /* clone */])(newVNode.props);
 	    for (var name_1 in newProps) {
 	        if (newProps[name_1] !== oldProps[name_1]) {
-	            element[name_1] = newProps[name_1];
+	            element[normalizeProp(name_1)] = newProps[name_1];
 	        }
 	        delete oldProps[name_1];
 	    }
 	    for (var name_2 in oldProps) {
-	        delete element[name_2];
+	        delete element[normalizeProp(name_2)];
+	    }
+	}
+	function normalizeProp(name) {
+	    switch (name) {
+	        case 'class':
+	            return 'className';
+	        default:
+	            return name;
 	    }
 	}
 

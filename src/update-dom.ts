@@ -106,17 +106,27 @@ function updateElement(oldNode: HTMLElement, oldVNode: VElement, newVNode: VElem
 }
 
 function updateProps(element: HTMLElement, oldVNode: VElement, newVNode: VElement): void {
+	//console.log('updateProps', element, oldVNode, newVNode);
 	const oldProps = clone(oldVNode.props);
 	const newProps = clone(newVNode.props);
 
 	for(let name in newProps) {
 		if(newProps[name] !== oldProps[name]) {
-			element[name] = newProps[name];
+			element[normalizeProp(name)] = newProps[name];
 		}
 		delete oldProps[name];
 	}
 
 	for(let name in oldProps) {
-		delete element[name];
+		delete element[normalizeProp(name)];
+	}
+}
+
+function normalizeProp(name: string): string {
+	switch(name) {
+		case 'class':
+			return 'className';
+		default:
+			return name;
 	}
 }
