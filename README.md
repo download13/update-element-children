@@ -4,6 +4,12 @@
 
 Unlike most other virtual doms, this one is intended to operate on the children of an existing [HTMLElement](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement).
 
+## Install:
+
+```
+npm i update-element-children
+```
+
 ## Examples:
 
 ### Simple Example
