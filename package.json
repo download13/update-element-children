@@ -10,12 +10,14 @@
   "devDependencies": {
     "babel-loader": "^6.2.4",
     "babel-plugin-transform-object-rest-spread": "^6.8.0",
+    "babel-plugin-transform-react-jsx": "^6.8.0",
     "babel-preset-es2015-native-modules": "^6.6.0",
     "dift": "^0.1.12",
     "expect.js": "^0.3.1",
     "jsdom": "^9.2.1",
     "mocha": "^2.5.3",
     "mocha-jsdom": "^1.1.0",
+    "redux": "^3.5.2",
     "webpack": "^2.1.0-beta.13"
   },
   "scripts": {
