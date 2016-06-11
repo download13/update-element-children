@@ -121,6 +121,20 @@ describe('updateChildren', () => {
 		expect(root.childNodes[0].textContent).to.be.eql('text');
 	});
 
+	it('can update several text child nodes', () => {
+		const root = $c('div');
+		root.appendChild($t('txt1'));
+		root.appendChild($t('txt2'));
+		const domA = ['txt1', 'txt2'];
+		const domB = ['text1', 'text2', 'text3'];
+
+		updateChildren(root, domA, domB);
+		expect(root.childNodes.length).to.be.eql(3);
+		expect(root.childNodes[0].textContent).to.be.eql('text1');
+		expect(root.childNodes[1].textContent).to.be.eql('text2');
+		expect(root.childNodes[2].textContent).to.be.eql('text3');
+	});
+
 	it('can remove a text child node', () => {
 		const root = $c('div');
 		root.appendChild($t('txt'));
