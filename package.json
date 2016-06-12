@@ -1,6 +1,6 @@
 {
   "name": "update-element-children",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A virtual dom library that focuses on updating the children of an element",
   "main": "dist/index.js",
   "directories": {
@@ -13,6 +13,7 @@
   },
   "files": [
     "tsconfig.json",
+    "index.d.ts",
     "src/",
     "dist/"
   ],
