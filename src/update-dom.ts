@@ -11,14 +11,14 @@ import {
 } from './types';
 
 
-export function updateChildren(parentNode: HTMLElement, oldChildren: any, newChildren: any) {
+export function updateChildren(parentNode: HTMLElement, oldChildren: any, newChildren: any): void {
 	const oldVNodes = sanitizeChildren(ensureArray(oldChildren));
 	const newVNodes = sanitizeChildren(ensureArray(newChildren));
 
 	updateChildrenInternal(parentNode, oldVNodes, newVNodes);
 }
 
-function updateChildrenInternal(parentNode: HTMLElement, oldVNodes: VNode[], newVNodes: VNode[]) {
+function updateChildrenInternal(parentNode: HTMLElement, oldVNodes: VNode[], newVNodes: VNode[]): void {
 	diffList<VNode>(oldVNodes, newVNodes, (editType: number, old: VNode, next: VNode, index: number) => {
 		//console.log('listdiff', editType, old, next, index);
 		repositionNode(parentNode, editType, old, next, index);
@@ -74,24 +74,6 @@ function updateNode(oldNode: Node, oldVNode: VNode, newVNode: VNode): Node {
 
 	console.error('updateNode error', oldNode, oldVNode, newVNode);
 	throw new Error('This should never happen');
-
-/*
-	return replaceNode(oldNode, oldVNode, newVNode);
-		const newNode = createRealDomNode(newVNode);
-		console.log('new', oldNode, newNode)
-		oldNode.parentNode.replaceChild(
-			newNode,
-			oldNode
-		);
-		return newNode;
-	} else if(newVNode.type) {
-		updateProps(oldNode, oldVNode, newVNode);
-		updateChildrenInternal(oldNode, oldVNode.children, newVNode.children);
-	} else if(typeof newVNode === 'string') {
-		oldNode.textContent = newVNode;
-	}
-*/
-	//return oldNode;
 }
 
 function updateText(oldNode: Text, newVNode: VTextNode): Text {
