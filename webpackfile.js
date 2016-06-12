@@ -23,9 +23,9 @@ module.exports = [
 		}
 	},
 	{
-		entry: __dirname + '/examples/index.js',
+		entry: __dirname + '/example/index.js',
 		output: {
-			path: __dirname + '/examples',
+			path: __dirname + '/example',
 			filename: 'build.js'
 		},
 		module: {
