@@ -9,13 +9,12 @@
   },
   "scripts": {
     "test": "mocha",
-    "build": "webpack -p",
-    "watch": "webpack --watch",
-    "prepublish": "npm run build"
+    "build:example": "cd example && webpack"
   },
   "files": [
+    "tsconfig.json",
     "src/",
-    "dist"
+    "dist/"
   ],
   "dependencies": {},
   "devDependencies": {
