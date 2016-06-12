@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "target": "es5",
-        "module": "es6",
+        "module": "commonjs",
         "moduleResolution": "node",
         "isolatedModules": false,
         "jsx": "react",
@@ -15,7 +15,8 @@
         "removeComments": true,
         "noLib": false,
         "preserveConstEnums": true,
-        "suppressImplicitAnyIndexErrors": true
+        "suppressImplicitAnyIndexErrors": true,
+        "outDir": "dist/"
     },
     "exclude": [
         "node_modules",

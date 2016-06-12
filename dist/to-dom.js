@@ -1,7 +1,8 @@
-import { isVTextNode } from './types';
-export function createRealDomNode(vnode, doc) {
+"use strict";
+var types_1 = require('./types');
+function createRealDomNode(vnode, doc) {
     if (doc === void 0) { doc = document; }
-    if (isVTextNode(vnode)) {
+    if (types_1.isVTextNode(vnode)) {
         return doc.createTextNode(vnode.text);
     }
     var element = doc.createElement(vnode.name);
@@ -11,6 +12,7 @@ export function createRealDomNode(vnode, doc) {
         .forEach(element.appendChild.bind(element));
     return element;
 }
+exports.createRealDomNode = createRealDomNode;
 function populateAttributes(element, props) {
     for (var key in props) {
         element[name] = props[name];

@@ -1,4 +1,5 @@
-export function h(name, props) {
+"use strict";
+function h(name, props) {
     var children = [];
     for (var _i = 2; _i < arguments.length; _i++) {
         children[_i - 2] = arguments[_i];
@@ -12,11 +13,13 @@ export function h(name, props) {
             .map(childToVNode)
     };
 }
-export function sanitizeChildren(children) {
+exports.h = h;
+function sanitizeChildren(children) {
     return children
         .filter(truthy)
         .map(childToVNode);
 }
+exports.sanitizeChildren = sanitizeChildren;
 function childToVNode(child, i) {
     if (typeof child === 'string') {
         return {
