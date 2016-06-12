@@ -23,6 +23,9 @@
         "typings/browser",
         "typings/browser.d.ts"
     ],
+    "filesGlob": [
+        "src/*.ts"
+    ],
     "compileOnSave": true,
     "buildOnSave": false,
     "atom": {
