@@ -1,28 +1,28 @@
 import {
-	Child,
 	VElement,
-	VNode
+	VNode,
+	isVNode
 } from './types';
 
 
-export function h(name: string, props: Object, ...children: Child[]): VElement {
+export function h(name: string, props: Object, ...children: any[]): VElement {
 	return {
 		type: 'element',
 		name,
 		props: props || {},
 		children: children
-			.filter(truthy)
+			.filter(nonNull)
 			.map(childToVNode)
 	};
 }
 
-export function sanitizeChildren(children: Child[]): VNode[] {
+export function sanitizeChildren(children: any[]): VNode[] {
 	return children
-		.filter(truthy)
+		.filter(nonNull)
 		.map(childToVNode);
 }
 
-function childToVNode(child: Child, i: number): VNode {
+function childToVNode(child: any, i: number): VNode {
 	if(typeof child === 'string') {
 		return {
 			type: 'text',
@@ -30,10 +30,15 @@ function childToVNode(child: Child, i: number): VNode {
 			index: i
 		};
 	}
-	child.index = i;
-	return child;
+
+	if(isVNode(child)) {
+		child.index = i;
+		return child;
+	}
+
+	return childToVNode(child.toString(), i);
 }
 
-function truthy(a: any): boolean {
-	return !!a;
+function nonNull(a: any): boolean {
+	return a != null;
 }

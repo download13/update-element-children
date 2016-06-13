@@ -22,3 +22,7 @@ export function isVTextNode(a: VNode): a is VTextNode {
 export function isVElement(a: VNode): a is VElement {
 	return a.type === 'element';
 }
+
+export function isVNode(a: any): a is VNode {
+	return a && a.type && (isVElement(a) || isVTextNode(a));
+}
