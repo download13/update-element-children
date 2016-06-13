@@ -13,6 +13,7 @@ describe('h', () => {
 			children: []
 		});
 	});
+	
 	it('creates nested vnodes', () => {
 		const vnode = h('div', null, h('span'));
 		expect(vnode).to.be.eql({
@@ -28,6 +29,7 @@ describe('h', () => {
 			}]
 		});
 	});
+
 	it('creates nested vnodes with string children', () => {
 		const vnode = h('div', null, 'teststring');
 		expect(vnode).to.be.eql({
@@ -41,6 +43,7 @@ describe('h', () => {
 			}]
 		});
 	});
+
 	it('creates nested vnodes with null children', () => {
 		const vnode = h('div', null, null);
 		expect(vnode).to.be.eql({
@@ -50,6 +53,7 @@ describe('h', () => {
 			children: []
 		});
 	});
+
 	it('creates nested vnodes with undefined children', () => {
 		const vnode = h('div', null, undefined);
 		expect(vnode).to.be.eql({
