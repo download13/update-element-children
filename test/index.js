@@ -13,7 +13,7 @@ describe('h', () => {
 			children: []
 		});
 	});
-	
+
 	it('creates nested vnodes', () => {
 		const vnode = h('div', null, h('span'));
 		expect(vnode).to.be.eql({
@@ -61,6 +61,76 @@ describe('h', () => {
 			name: 'div',
 			props: {},
 			children: []
+		});
+	});
+
+	it('creates nested vnodes with number children', () => {
+		const vnode = h('div', null, 0);
+		expect(vnode).to.be.eql({
+			type: 'element',
+			name: 'div',
+			props: {},
+			children: [{
+				type: 'text',
+				text: '0',
+				index: 0
+			}]
+		});
+	});
+
+	it('creates nested vnodes with boolean children', () => {
+		const vnode = h('div', null, true);
+		expect(vnode).to.be.eql({
+			type: 'element',
+			name: 'div',
+			props: {},
+			children: [{
+				type: 'text',
+				text: 'true',
+				index: 0
+			}]
+		});
+	});
+
+	it('creates nested vnodes with empty array children', () => {
+		const vnode = h('div', null, []);
+		expect(vnode).to.be.eql({
+			type: 'element',
+			name: 'div',
+			props: {},
+			children: [{
+				type: 'text',
+				text: '',
+				index: 0
+			}]
+		});
+	});
+
+	it('creates nested vnodes with populated array children', () => {
+		const vnode = h('div', null, [5, 's']);
+		expect(vnode).to.be.eql({
+			type: 'element',
+			name: 'div',
+			props: {},
+			children: [{
+				type: 'text',
+				text: '5,s',
+				index: 0
+			}]
+		});
+	});
+
+	it('creates nested vnodes with object children', () => {
+		const vnode = h('div', null, {});
+		expect(vnode).to.be.eql({
+			type: 'element',
+			name: 'div',
+			props: {},
+			children: [{
+				type: 'text',
+				text: '[object Object]',
+				index: 0
+			}]
 		});
 	});
 });
