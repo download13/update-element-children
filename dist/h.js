@@ -1,4 +1,5 @@
 "use strict";
+var types_1 = require('./types');
 function h(name, props) {
     var children = [];
     for (var _i = 2; _i < arguments.length; _i++) {
@@ -9,14 +10,14 @@ function h(name, props) {
         name: name,
         props: props || {},
         children: children
-            .filter(truthy)
+            .filter(nonNull)
             .map(childToVNode)
     };
 }
 exports.h = h;
 function sanitizeChildren(children) {
     return children
-        .filter(truthy)
+        .filter(nonNull)
         .map(childToVNode);
 }
 exports.sanitizeChildren = sanitizeChildren;
@@ -28,9 +29,12 @@ function childToVNode(child, i) {
             index: i
         };
     }
-    child.index = i;
-    return child;
+    if (types_1.isVNode(child)) {
+        child.index = i;
+        return child;
+    }
+    return childToVNode(child.toString(), i);
 }
-function truthy(a) {
-    return !!a;
+function nonNull(a) {
+    return a != null;
 }
