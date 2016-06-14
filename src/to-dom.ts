@@ -2,6 +2,7 @@ import {
 	VNode,
 	isVTextNode
 } from './types';
+import {updateProps} from './update-dom';
 
 
 export function createRealDomNode(vnode: VNode, doc = document): Text | HTMLElement {
@@ -10,15 +11,9 @@ export function createRealDomNode(vnode: VNode, doc = document): Text | HTMLElem
 	}
 
 	const element = doc.createElement(vnode.name);
-	populateAttributes(element, vnode.props);
+	updateProps(element, {}, vnode.props);
 	vnode.children
 		.map(vnode => createRealDomNode(vnode))
-		.forEach(element.appendChild.bind(element));
+		.forEach(node => element.appendChild(node));
 	return element;
-}
-
-function populateAttributes(element: HTMLElement, props: Object) {
-	for(let key in props) {
-		element[name] = props[name];
-	}
 }

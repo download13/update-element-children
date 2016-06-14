@@ -58,13 +58,13 @@ function updateText(oldNode, newVNode) {
     return oldNode;
 }
 function updateElement(oldNode, oldVNode, newVNode) {
-    updateProps(oldNode, oldVNode, newVNode);
+    updateProps(oldNode, oldVNode.props, newVNode.props);
     updateChildrenInternal(oldNode, oldVNode.children, newVNode.children);
     return oldNode;
 }
-function updateProps(element, oldVNode, newVNode) {
-    var oldProps = util_1.clone(oldVNode.props);
-    var newProps = util_1.clone(newVNode.props);
+function updateProps(element, oldPropsArg, newPropsArg) {
+    var oldProps = util_1.clone(oldPropsArg);
+    var newProps = util_1.clone(newPropsArg);
     for (var name_1 in newProps) {
         if (newProps[name_1] !== oldProps[name_1]) {
             element[normalizeProp(name_1)] = newProps[name_1];
@@ -75,11 +75,13 @@ function updateProps(element, oldVNode, newVNode) {
         delete element[normalizeProp(name_2)];
     }
 }
+exports.updateProps = updateProps;
 function normalizeProp(name) {
-    switch (name) {
-        case 'class':
-            return 'className';
-        default:
-            return name;
+    if (name === 'class') {
+        return 'className';
     }
+    if (name.indexOf('on') === 0) {
+        return name.toLowerCase();
+    }
+    return name;
 }

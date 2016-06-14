@@ -82,15 +82,15 @@ function updateText(oldNode: Text, newVNode: VTextNode): Text {
 }
 
 function updateElement(oldNode: HTMLElement, oldVNode: VElement, newVNode: VElement): HTMLElement {
-	updateProps(oldNode, oldVNode, newVNode);
+	updateProps(oldNode, oldVNode.props, newVNode.props);
 	updateChildrenInternal(oldNode, oldVNode.children, newVNode.children);
 	return oldNode;
 }
 
-function updateProps(element: HTMLElement, oldVNode: VElement, newVNode: VElement): void {
+export function updateProps(element: HTMLElement, oldPropsArg: Object, newPropsArg: Object): void {
 	//console.log('updateProps', element, oldVNode, newVNode);
-	const oldProps = clone(oldVNode.props);
-	const newProps = clone(newVNode.props);
+	const oldProps = clone(oldPropsArg);
+	const newProps = clone(newPropsArg);
 
 	for(let name in newProps) {
 		if(newProps[name] !== oldProps[name]) {
@@ -105,10 +105,11 @@ function updateProps(element: HTMLElement, oldVNode: VElement, newVNode: VElemen
 }
 
 function normalizeProp(name: string): string {
-	switch(name) {
-		case 'class':
-			return 'className';
-		default:
-			return name;
+	if(name === 'class') {
+		return 'className';
 	}
+	if(name.indexOf('on') === 0) {
+		return name.toLowerCase();
+	}
+	return name;
 }
