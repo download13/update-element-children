@@ -148,6 +148,17 @@ describe('updateChildren', () => {
 		expect(root.childNodes[0].localName).to.be.eql('div');
 	});
 
+	it('can add an element with an attribute', () => {
+		const root = $c('div');
+		const domA = null;
+		const domB = h('div', {'attrbte': 'testvalue'});
+
+		updateChildren(root, domA, domB);
+		expect(root.childNodes.length).to.be.eql(1);
+		expect(root.childNodes[0].localName).to.be.eql('div');
+		expect(root.childNodes[0].attrbte).to.be.eql('testvalue');
+	});
+
 	it('can add several elements', () => {
 		const root = $c('div');
 		const domA = null;
@@ -249,6 +260,17 @@ describe('updateChildren', () => {
 
 		updateChildren(root, domA, domB);
 		expect(root.childNodes[0].attributes.length).to.be.eql(0);
+	});
+
+	it('can add an event handler', () => {
+		const clickHandler = () => {};
+
+		const root = $c('div');
+		const domA = null;
+		const domB = h('button', {onclick: clickHandler});
+
+		updateChildren(root, domA, domB);
+		expect(root.childNodes[0].onclick).to.be.eql(clickHandler);
 	});
 });
 
