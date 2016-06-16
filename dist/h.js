@@ -8,11 +8,29 @@ function h(name, props) {
     return {
         type: 'element',
         name: name,
-        props: props || {},
+        props: normalizeProps(props),
         children: sanitizeChildren(children)
     };
 }
 exports.h = h;
+function normalizeProps(props) {
+    if (props === void 0) { props = {}; }
+    var r = {};
+    for (var k in props) {
+        r[normalizePropName(k)] = props[k];
+    }
+    return r;
+}
+var onRegex = /^on[A-Z]+/;
+function normalizePropName(name) {
+    if (name === 'className') {
+        return 'class';
+    }
+    if (onRegex.test(name)) {
+        return name.toLowerCase();
+    }
+    return name;
+}
 function sanitizeChildren(children) {
     return children
         .filter(nonNull)
