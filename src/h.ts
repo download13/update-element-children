@@ -10,9 +10,7 @@ export function h(name: string, props: Object, ...children: any[]): VElement {
 		type: 'element',
 		name,
 		props: props || {},
-		children: children
-			.filter(nonNull)
-			.map(childToVNode)
+		children: sanitizeChildren(children)
 	};
 }
 

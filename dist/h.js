@@ -9,9 +9,7 @@ function h(name, props) {
         type: 'element',
         name: name,
         props: props || {},
-        children: children
-            .filter(nonNull)
-            .map(childToVNode)
+        children: sanitizeChildren(children)
     };
 }
 exports.h = h;
