@@ -9,7 +9,7 @@ function h(name, props) {
         type: 'element',
         name: name,
         props: normalizeProps(props),
-        children: sanitizeChildren(children)
+        children: normalizeChildren(children)
     };
 }
 exports.h = h;
@@ -31,12 +31,12 @@ function normalizePropName(name) {
     }
     return name;
 }
-function sanitizeChildren(children) {
+function normalizeChildren(children) {
     return children
         .filter(nonNull)
         .map(childToVNode);
 }
-exports.sanitizeChildren = sanitizeChildren;
+exports.normalizeChildren = normalizeChildren;
 function childToVNode(child, i) {
     if (typeof child === 'string') {
         return {

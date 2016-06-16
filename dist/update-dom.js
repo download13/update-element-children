@@ -4,8 +4,8 @@ var util_1 = require('./util');
 var h_1 = require('./h');
 var types_1 = require('./types');
 function updateChildren(parentNode, oldChildren, newChildren) {
-    var oldVNodes = h_1.sanitizeChildren(util_1.ensureArray(oldChildren));
-    var newVNodes = h_1.sanitizeChildren(util_1.ensureArray(newChildren));
+    var oldVNodes = h_1.normalizeChildren(util_1.ensureArray(oldChildren));
+    var newVNodes = h_1.normalizeChildren(util_1.ensureArray(newChildren));
     updateChildrenInternal(parentNode, oldVNodes, newVNodes);
 }
 exports.updateChildren = updateChildren;

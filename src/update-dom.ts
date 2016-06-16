@@ -1,6 +1,6 @@
 import diffList, {CREATE, UPDATE, MOVE, REMOVE} from 'dift';
 import {ensureArray, clone} from './util';
-import {sanitizeChildren} from './h';
+import {normalizeChildren} from './h';
 import {
 	VNode,
 	VTextNode,
@@ -11,8 +11,8 @@ import {
 
 
 export function updateChildren(parentNode: HTMLElement, oldChildren: any, newChildren: any): void {
-	const oldVNodes = sanitizeChildren(ensureArray(oldChildren));
-	const newVNodes = sanitizeChildren(ensureArray(newChildren));
+	const oldVNodes = normalizeChildren(ensureArray(oldChildren));
+	const newVNodes = normalizeChildren(ensureArray(newChildren));
 
 	updateChildrenInternal(parentNode, oldVNodes, newVNodes);
 }

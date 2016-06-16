@@ -10,7 +10,7 @@ export function h(name: string, props: Object, ...children: any[]): VElement {
 		type: 'element',
 		name,
 		props: normalizeProps(props),
-		children: sanitizeChildren(children)
+		children: normalizeChildren(children)
 	};
 }
 
@@ -35,7 +35,7 @@ function normalizePropName(name: string): string {
 	return name;
 }
 
-export function sanitizeChildren(children: any[]): VNode[] {
+export function normalizeChildren(children: any[]): VNode[] {
 	return children
 		.filter(nonNull)
 		.map(childToVNode);
