@@ -1,5 +1,4 @@
 import diffList, {CREATE, UPDATE, MOVE, REMOVE} from 'dift';
-import {createRealDomNode} from './to-dom';
 import {ensureArray, clone} from './util';
 import {sanitizeChildren} from './h';
 import {
@@ -40,7 +39,7 @@ function repositionNode(parentNode: HTMLElement, editType: number, oldVNode: VNo
 	switch(editType) {
 		case CREATE:
 			parentNode.insertBefore(
-				createRealDomNode(newVNode),
+				createDomNode(newVNode),
 				indexNode
 			);
 			break;
@@ -112,4 +111,17 @@ function normalizeProp(name: string): string {
 		return name.toLowerCase();
 	}
 	return name;
+}
+
+function createDomNode(vnode: VNode, doc = document): Text | HTMLElement {
+	if(isVTextNode(vnode)) {
+		return doc.createTextNode(vnode.text);
+	}
+
+	const element = doc.createElement(vnode.name);
+	updateProps(element, {}, vnode.props);
+	vnode.children
+		.map(vnode => createDomNode(vnode))
+		.forEach(node => element.appendChild(node));
+	return element;
 }

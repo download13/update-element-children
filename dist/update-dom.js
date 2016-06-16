@@ -1,6 +1,5 @@
 "use strict";
 var dift_1 = require('dift');
-var to_dom_1 = require('./to-dom');
 var util_1 = require('./util');
 var h_1 = require('./h');
 var types_1 = require('./types');
@@ -28,7 +27,7 @@ function repositionNode(parentNode, editType, oldVNode, newVNode, index) {
     var indexNode = parentNode.childNodes[index] || null;
     switch (editType) {
         case dift_1.CREATE:
-            parentNode.insertBefore(to_dom_1.createRealDomNode(newVNode), indexNode);
+            parentNode.insertBefore(createDomNode(newVNode), indexNode);
             break;
         case dift_1.UPDATE:
             updateNode(indexNode, oldVNode, newVNode);
@@ -84,4 +83,16 @@ function normalizeProp(name) {
         return name.toLowerCase();
     }
     return name;
+}
+function createDomNode(vnode, doc) {
+    if (doc === void 0) { doc = document; }
+    if (types_1.isVTextNode(vnode)) {
+        return doc.createTextNode(vnode.text);
+    }
+    var element = doc.createElement(vnode.name);
+    updateProps(element, {}, vnode.props);
+    vnode.children
+        .map(function (vnode) { return createDomNode(vnode); })
+        .forEach(function (node) { return element.appendChild(node); });
+    return element;
 }
