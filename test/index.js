@@ -154,9 +154,7 @@ describe('updateChildren', () => {
 		const domB = h('div', {'attrbte': 'testvalue'});
 
 		updateChildren(root, domA, domB);
-		expect(root.childNodes.length).to.be.eql(1);
-		expect(root.childNodes[0].localName).to.be.eql('div');
-		expect(root.childNodes[0].attrbte).to.be.eql('testvalue');
+		expect(root.childNodes[0].getAttribute('attrbte')).to.be.eql('testvalue');
 	});
 
 	it('can add several elements', () => {
@@ -239,6 +237,27 @@ describe('updateChildren', () => {
 		updateChildren(root, domA, domB);
 		expect(root.childNodes[0].attributes.length).to.be.eql(1);
 		expect(root.childNodes[0].getAttribute('class')).to.be.eql('testclass');
+	});
+
+	it('can add a className property', () => {
+		const root = $c('div');
+		root.appendChild($c('div'));
+		const domA = h('div', {});
+		const domB = h('div', {className: 'testclass'});
+
+		updateChildren(root, domA, domB);
+		expect(root.childNodes[0].attributes.length).to.be.eql(1);
+		expect(root.childNodes[0].getAttribute('class')).to.be.eql('testclass');
+	});
+
+	it('can add a data attribute', () => {
+		const root = $c('div');
+		root.appendChild($c('div'));
+		const domA = h('div', {});
+		const domB = h('div', {'data-test': 'testvalue'});
+
+		updateChildren(root, domA, domB);
+		expect(root.childNodes[0].getAttribute('data-test')).to.be.eql('testvalue');
 	});
 
 	it('can update an attribute', () => {
