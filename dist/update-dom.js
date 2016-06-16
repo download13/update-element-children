@@ -66,23 +66,35 @@ function updateProps(element, oldPropsArg, newPropsArg) {
     var newProps = util_1.clone(newPropsArg);
     for (var name_1 in newProps) {
         if (newProps[name_1] !== oldProps[name_1]) {
-            element[normalizeProp(name_1)] = newProps[name_1];
+            addProp(element, name_1, newProps[name_1]);
         }
         delete oldProps[name_1];
     }
     for (var name_2 in oldProps) {
-        delete element[normalizeProp(name_2)];
+        removeProp(element, name_2);
     }
 }
 exports.updateProps = updateProps;
-function normalizeProp(name) {
-    if (name === 'class') {
-        return 'className';
+function addProp(element, name, value) {
+    if (name in element) {
+        element[name] = value;
     }
-    if (name.indexOf('on') === 0) {
-        return name.toLowerCase();
+    else {
+        element.setAttribute(name, value);
     }
-    return name;
+}
+function removeProp(element, name) {
+    if (name in element) {
+        if (typeof element[name] === 'string') {
+            element[name] = '';
+        }
+        else {
+            element[name] = undefined;
+        }
+    }
+    else {
+        element.removeAttribute(name);
+    }
 }
 function createDomNode(vnode, doc) {
     if (doc === void 0) { doc = document; }

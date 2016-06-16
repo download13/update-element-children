@@ -93,24 +93,40 @@ export function updateProps(element: HTMLElement, oldPropsArg: Object, newPropsA
 
 	for(let name in newProps) {
 		if(newProps[name] !== oldProps[name]) {
-			element[normalizeProp(name)] = newProps[name];
+			// Add the new property to the element
+			addProp(element, name, newProps[name]);
 		}
+
+		// Consider it to have overwritten the old property
 		delete oldProps[name];
 	}
 
+	// Any old properties not also in the new properties get removed
 	for(let name in oldProps) {
-		delete element[normalizeProp(name)];
+		removeProp(element, name);
 	}
 }
 
-function normalizeProp(name: string): string {
-	if(name === 'class') {
-		return 'className';
+
+
+function addProp(element: HTMLElement, name: string, value: any): void {
+	if(name in element) {
+		element[name] = value;
+	} else {
+		element.setAttribute(name, value);
 	}
-	if(name.indexOf('on') === 0) {
-		return name.toLowerCase();
+}
+
+function removeProp(element: HTMLElement, name: string): void {
+	if(name in element) {
+		if(typeof element[name] === 'string') {
+			element[name] = '';
+		} else {
+			element[name] = undefined;
+		}
+	} else {
+		element.removeAttribute(name);
 	}
-	return name;
 }
 
 function createDomNode(vnode: VNode, doc = document): Text | HTMLElement {
