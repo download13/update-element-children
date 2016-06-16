@@ -1,3 +1,10 @@
+export type UnsanitizedChildren = any[];
+
+export type Child = VNode;
+export type Children = Child[];
+
+export type VNode = VTextNode | VElement;
+
 export interface VTextNode {
 	type: 'text';
 	text: string;
@@ -8,12 +15,10 @@ export interface VElement {
 	type: 'element';
 	name: string;
 	props: Object;
-	children: VNode[];
+	children: Children;
 	index?: number;
 }
 
-export type VNode = VTextNode | VElement;
-export type Child = undefined | null | string | VNode;
 
 export function isVTextNode(a: VNode): a is VTextNode {
 	return a.type === 'text';

@@ -34,10 +34,10 @@ function normalizePropName(name) {
 function normalizeChildren(children) {
     return children
         .filter(nonNull)
-        .map(childToVNode);
+        .map(normalizeChild);
 }
 exports.normalizeChildren = normalizeChildren;
-function childToVNode(child, i) {
+function normalizeChild(child, i) {
     if (typeof child === 'string') {
         return {
             type: 'text',
@@ -49,7 +49,7 @@ function childToVNode(child, i) {
         child.index = i;
         return child;
     }
-    return childToVNode(child.toString(), i);
+    return normalizeChild(child.toString(), i);
 }
 function nonNull(a) {
     return a != null;

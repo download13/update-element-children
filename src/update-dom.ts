@@ -6,7 +6,8 @@ import {
 	VTextNode,
 	VElement,
 	isVElement,
-	isVTextNode
+	isVTextNode,
+	Children
 } from './types';
 
 
@@ -17,8 +18,8 @@ export function updateChildren(parentNode: HTMLElement, oldChildren: any, newChi
 	updateChildrenInternal(parentNode, oldVNodes, newVNodes);
 }
 
-function updateChildrenInternal(parentNode: HTMLElement, oldVNodes: VNode[], newVNodes: VNode[]): void {
-	diffList<VNode>(oldVNodes, newVNodes, (editType: number, old: VNode, next: VNode, index: number) => {
+function updateChildrenInternal(parentNode: HTMLElement, oldChildren: Children, newChildren: Children): void {
+	diffList<VNode>(oldChildren, newChildren, (editType: number, old: VNode, next: VNode, index: number) => {
 		//console.log('listdiff', editType, old, next, index);
 		repositionNode(parentNode, editType, old, next, index);
 	}, getKey);

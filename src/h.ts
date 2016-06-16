@@ -1,11 +1,13 @@
 import {
 	VElement,
-	VNode,
-	isVNode
+	isVNode,
+	UnsanitizedChildren,
+	Children,
+	Child
 } from './types';
 
 
-export function h(name: string, props: Object, ...children: any[]): VElement {
+export function h(name: string, props: Object, ...children: UnsanitizedChildren): VElement {
 	return {
 		type: 'element',
 		name,
@@ -35,13 +37,13 @@ function normalizePropName(name: string): string {
 	return name;
 }
 
-export function normalizeChildren(children: any[]): VNode[] {
+export function normalizeChildren(children: UnsanitizedChildren): Children {
 	return children
 		.filter(nonNull)
-		.map(childToVNode);
+		.map(normalizeChild);
 }
 
-function childToVNode(child: any, i: number): VNode {
+function normalizeChild(child: any, i: number): Child {
 	if(typeof child === 'string') {
 		return {
 			type: 'text',
@@ -55,7 +57,7 @@ function childToVNode(child: any, i: number): VNode {
 		return child;
 	}
 
-	return childToVNode(child.toString(), i);
+	return normalizeChild(child.toString(), i);
 }
 
 function nonNull(a: any): boolean {

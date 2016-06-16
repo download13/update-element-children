@@ -9,8 +9,8 @@ function updateChildren(parentNode, oldChildren, newChildren) {
     updateChildrenInternal(parentNode, oldVNodes, newVNodes);
 }
 exports.updateChildren = updateChildren;
-function updateChildrenInternal(parentNode, oldVNodes, newVNodes) {
-    dift_1.default(oldVNodes, newVNodes, function (editType, old, next, index) {
+function updateChildrenInternal(parentNode, oldChildren, newChildren) {
+    dift_1.default(oldChildren, newChildren, function (editType, old, next, index) {
         repositionNode(parentNode, editType, old, next, index);
     }, getKey);
 }
