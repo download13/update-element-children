@@ -12,8 +12,6 @@ npm i update-element-children
 
 ## Examples:
 
-### [Demo](https://download13.github.io/update-element-children/example/index.html)
-
 ### Simple Example
 
 ```javascript
@@ -23,6 +21,14 @@ import {h, updateChildren} from 'update-element-children';
 const root = document.getElementById('root');
 
 updateChildren(root, null, <div>Test</div>);
+```
+
+Results in the following tree:
+
+```html
+<div id="root">
+	<div>Test</div>
+</div>
 ```
 
 ### Redux Example
@@ -55,3 +61,11 @@ setInterval(
 	1000
 );
 ```
+
+Results in the following tree:
+
+```html
+<div id="root">11:20:06 AM</div>
+```
+
+Which changes every second to reflect the new time. A demo of this behavior can be found [here](https://download13.github.io/update-element-children/example/index.html).
