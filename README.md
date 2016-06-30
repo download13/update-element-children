@@ -12,6 +12,8 @@ npm i update-element-children
 
 ## Examples:
 
+### [Demo](https://download13.github.io/update-element-children/example/index.html)
+
 ### Simple Example
 
 ```javascript
