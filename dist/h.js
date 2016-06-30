@@ -34,22 +34,29 @@ function normalizePropName(name) {
 function normalizeChildren(children) {
     return children
         .filter(nonNull)
-        .map(normalizeChild);
+        .reduce(expandItem, [])
+        .map(normalizeChild)
+        .map(addIndex);
 }
 exports.normalizeChildren = normalizeChildren;
-function normalizeChild(child, i) {
+function normalizeChild(child) {
     if (typeof child === 'string') {
         return {
             type: 'text',
-            text: child,
-            index: i
+            text: child
         };
     }
     if (types_1.isVNode(child)) {
-        child.index = i;
         return child;
     }
-    return normalizeChild(child.toString(), i);
+    return normalizeChild(child.toString());
+}
+function expandItem(acc, item) {
+    return acc.concat(item);
+}
+function addIndex(item, i) {
+    item.index = i;
+    return item;
 }
 function nonNull(a) {
     return a != null;

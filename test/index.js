@@ -44,6 +44,27 @@ describe('h', () => {
 		});
 	});
 
+	it('creates nested vnodes with multiple string children', () => {
+		const vnode = h('div', null, ['teststring', 'secondstring']);
+		expect(vnode).to.be.eql({
+			type: 'element',
+			name: 'div',
+			props: {},
+			children: [
+				{
+					type: 'text',
+					text: 'teststring',
+					index: 0
+				},
+				{
+					type: 'text',
+					text: 'secondstring',
+					index: 1
+				}
+			]
+		});
+	});
+
 	it('creates nested vnodes with null children', () => {
 		const vnode = h('div', null, null);
 		expect(vnode).to.be.eql({
@@ -98,11 +119,7 @@ describe('h', () => {
 			type: 'element',
 			name: 'div',
 			props: {},
-			children: [{
-				type: 'text',
-				text: '',
-				index: 0
-			}]
+			children: []
 		});
 	});
 
@@ -112,11 +129,18 @@ describe('h', () => {
 			type: 'element',
 			name: 'div',
 			props: {},
-			children: [{
-				type: 'text',
-				text: '5,s',
-				index: 0
-			}]
+			children: [
+				{
+					type: 'text',
+					text: '5',
+					index: 0
+				},
+				{
+					type: 'text',
+					text: 's',
+					index: 1
+				}
+			]
 		});
 	});
 

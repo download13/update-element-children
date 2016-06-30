@@ -40,24 +40,33 @@ function normalizePropName(name: string): string {
 export function normalizeChildren(children: UnsanitizedChildren): Children {
 	return children
 		.filter(nonNull)
-		.map(normalizeChild);
+		.reduce(expandItem, [])
+		.map(normalizeChild)
+		.map(addIndex);
 }
 
-function normalizeChild(child: any, i: number): Child {
+function normalizeChild(child: any): Child {
 	if(typeof child === 'string') {
 		return {
 			type: 'text',
-			text: child,
-			index: i
+			text: child
 		};
 	}
 
 	if(isVNode(child)) {
-		child.index = i;
 		return child;
 	}
 
-	return normalizeChild(child.toString(), i);
+	return normalizeChild(child.toString());
+}
+
+function expandItem(acc: any[], item: any): any[] {
+	return acc.concat(item);
+}
+
+function addIndex(item: any, i: number): any {
+	item.index = i;
+	return item;
 }
 
 function nonNull(a: any): boolean {
