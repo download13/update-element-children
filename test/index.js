@@ -261,7 +261,7 @@ describe('updateChildren', () => {
 
 	it('can add an attribute', () => {
 		const root = $c('div');
-		const domA = updateChildren(root, null, h('div'))
+		const domA = updateChildren(root, null, h('div'));
 		const domB = h('div', {class: 'testclass'});
 
 		updateChildren(root, domA, domB);
@@ -269,9 +269,19 @@ describe('updateChildren', () => {
 		expect(root.childNodes[0].getAttribute('class')).to.be.eql('testclass');
 	});
 
+	it('can update then remove an element', () => {
+		const root = $c('div');
+		const domA = updateChildren(root, null, h('div'));
+		const domB = h('div', {class: 'testclass'});
+
+		updateChildren(root, domA, domB);
+		updateChildren(root, domB, null);
+		expect(root.childNodes.length).to.be.eql(0);
+	});
+
 	it('can add a className property', () => {
 		const root = $c('div');
-		const domA = updateChildren(root, null, h('div'))
+		const domA = updateChildren(root, null, h('div'));
 		const domB = h('div', {className: 'testclass'});
 
 		updateChildren(root, domA, domB);
@@ -281,7 +291,7 @@ describe('updateChildren', () => {
 
 	it('can add a data attribute', () => {
 		const root = $c('div');
-		const domA = updateChildren(root, null, h('div'))
+		const domA = updateChildren(root, null, h('div'));
 		const domB = h('div', {'data-test': 'testvalue'});
 
 		updateChildren(root, domA, domB);

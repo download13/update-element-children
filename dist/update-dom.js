@@ -53,11 +53,13 @@ function updateNode(oldNode, oldVNode, newVNode) {
 }
 function updateText(oldNode, newVNode) {
     oldNode.textContent = newVNode.text;
+    newVNode.nodeRef = oldNode;
     return oldNode;
 }
 function updateElement(oldNode, oldVNode, newVNode) {
     updateProps(oldNode, oldVNode.props, newVNode.props);
     updateChildrenInternal(oldNode, oldVNode.children, newVNode.children);
+    newVNode.nodeRef = oldNode;
     return oldNode;
 }
 function updateProps(element, oldPropsArg, newPropsArg) {

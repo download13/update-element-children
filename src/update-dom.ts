@@ -82,12 +82,14 @@ function updateNode(oldNode: Node, oldVNode: VNode, newVNode: VNode): Node {
 
 function updateText(oldNode: Text, newVNode: VTextNode): Text {
 	oldNode.textContent = newVNode.text;
+	newVNode.nodeRef = oldNode;
 	return oldNode;
 }
 
 function updateElement(oldNode: HTMLElement, oldVNode: VElement, newVNode: VElement): HTMLElement {
 	updateProps(oldNode, oldVNode.props, newVNode.props);
 	updateChildrenInternal(oldNode, oldVNode.children, newVNode.children);
+	newVNode.nodeRef = oldNode;
 	return oldNode;
 }
 
