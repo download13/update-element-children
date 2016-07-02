@@ -7,6 +7,7 @@ function updateChildren(parentNode, oldChildren, newChildren) {
     var oldVNodes = h_1.normalizeChildren(util_1.ensureArray(oldChildren));
     var newVNodes = h_1.normalizeChildren(util_1.ensureArray(newChildren));
     updateChildrenInternal(parentNode, oldVNodes, newVNodes);
+    return newVNodes;
 }
 exports.updateChildren = updateChildren;
 function updateChildrenInternal(parentNode, oldChildren, newChildren) {
@@ -33,12 +34,10 @@ function repositionNode(parentNode, editType, oldVNode, newVNode, index) {
             updateNode(indexNode, oldVNode, newVNode);
             break;
         case dift_1.MOVE:
-            var oldNodeMove = parentNode.childNodes[oldVNode.index];
-            parentNode.insertBefore(updateNode(oldNodeMove, oldVNode, newVNode), indexNode);
+            parentNode.insertBefore(updateNode(oldVNode.nodeRef, oldVNode, newVNode), indexNode);
             break;
         case dift_1.REMOVE:
-            var oldNodeRemove = parentNode.childNodes[oldVNode.index];
-            parentNode.removeChild(oldNodeRemove);
+            parentNode.removeChild(oldVNode.nodeRef);
             break;
     }
 }
@@ -99,9 +98,12 @@ function removeProp(element, name) {
 function createDomNode(vnode, doc) {
     if (doc === void 0) { doc = document; }
     if (types_1.isVTextNode(vnode)) {
-        return doc.createTextNode(vnode.text);
+        var textNode = doc.createTextNode(vnode.text);
+        vnode.nodeRef = textNode;
+        return textNode;
     }
     var element = doc.createElement(vnode.name);
+    vnode.nodeRef = element;
     updateProps(element, {}, vnode.props);
     vnode.children
         .map(function (vnode) { return createDomNode(vnode); })

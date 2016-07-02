@@ -9,6 +9,7 @@ export interface VTextNode {
 	type: 'text';
 	text: string;
 	index?: number;
+	nodeRef?: Text;
 }
 
 export interface VElement {
@@ -17,6 +18,7 @@ export interface VElement {
 	props: Object;
 	children: Children;
 	index?: number;
+	nodeRef?: HTMLElement;
 }
 
 

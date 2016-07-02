@@ -195,16 +195,6 @@ describe('updateChildren', () => {
 		expect(root.childNodes[1].localName).to.be.eql('span');
 	});
 
-	it('can remove an element', () => {
-		const root = $c('div');
-		root.appendChild($c('div'));
-		const domA = h('div', null);
-		const domB = null;
-
-		updateChildren(root, domA, domB);
-		expect(root.childNodes.length).to.be.eql(0);
-	});
-
 	it('can add a text child node', () => {
 		const root = $c('div');
 		const domA = [];
@@ -216,10 +206,30 @@ describe('updateChildren', () => {
 		expect(root.childNodes[0].textContent).to.be.eql('txt');
 	});
 
+	// TODO: Codify into tests the different cases of null, [], node, [node], [node, node]
+
+	it('can remove an element', () => {
+		const root = $c('div');
+		const domA = updateChildren(root, null, h('div'));
+		const domB = null;
+
+		updateChildren(root, domA, domB);
+		expect(root.childNodes.length).to.be.eql(0);
+	});
+
+	it('can replace an element', () => {
+		const root = $c('div');
+		const domA = updateChildren(root, null, h('div'));
+		const domB = h('span', null);
+
+		updateChildren(root, domA, domB);
+		expect(root.childNodes.length).to.be.eql(1);
+		expect(root.childNodes[0].localName).to.be.eql('span');
+	});
+
 	it('can update a text child node', () => {
 		const root = $c('div');
-		root.appendChild($t('txt'));
-		const domA = 'txt';
+		const domA = updateChildren(root, null, 'txt');
 		const domB = 'text';
 
 		updateChildren(root, domA, domB);
@@ -230,9 +240,7 @@ describe('updateChildren', () => {
 
 	it('can update several text child nodes', () => {
 		const root = $c('div');
-		root.appendChild($t('txt1'));
-		root.appendChild($t('txt2'));
-		const domA = ['txt1', 'txt2'];
+		const domA = updateChildren(root, null, ['txt1', 'txt2']);
 		const domB = ['text1', 'text2', 'text3'];
 
 		updateChildren(root, domA, domB);
@@ -244,8 +252,7 @@ describe('updateChildren', () => {
 
 	it('can remove a text child node', () => {
 		const root = $c('div');
-		root.appendChild($t('txt'));
-		const domA = 'txt';
+		const domA = updateChildren(root, null, 'txt');
 		const domB = null;
 
 		updateChildren(root, domA, domB);
@@ -254,8 +261,7 @@ describe('updateChildren', () => {
 
 	it('can add an attribute', () => {
 		const root = $c('div');
-		root.appendChild($c('div'));
-		const domA = h('div', {});
+		const domA = updateChildren(root, null, h('div'))
 		const domB = h('div', {class: 'testclass'});
 
 		updateChildren(root, domA, domB);
@@ -265,8 +271,7 @@ describe('updateChildren', () => {
 
 	it('can add a className property', () => {
 		const root = $c('div');
-		root.appendChild($c('div'));
-		const domA = h('div', {});
+		const domA = updateChildren(root, null, h('div'))
 		const domB = h('div', {className: 'testclass'});
 
 		updateChildren(root, domA, domB);
@@ -276,8 +281,7 @@ describe('updateChildren', () => {
 
 	it('can add a data attribute', () => {
 		const root = $c('div');
-		root.appendChild($c('div'));
-		const domA = h('div', {});
+		const domA = updateChildren(root, null, h('div'))
 		const domB = h('div', {'data-test': 'testvalue'});
 
 		updateChildren(root, domA, domB);
@@ -286,8 +290,7 @@ describe('updateChildren', () => {
 
 	it('can update an attribute', () => {
 		const root = $c('div');
-		root.appendChild($c('div'));
-		const domA = h('div', {class: 'testclass'});
+		const domA = updateChildren(root, null, h('div', {class: 'testclass'}));
 		const domB = h('div', {class: 'anotherclass'});
 
 		updateChildren(root, domA, domB);
@@ -297,8 +300,7 @@ describe('updateChildren', () => {
 
 	it('can remove an attribute', () => {
 		const root = $c('div');
-		root.appendChild($c('div'));
-		const domA = h('div', {class: 'testclass'});
+		const domA = updateChildren(root, null, h('div', {class: 'testclass'}));
 		const domB = h('div', {});
 
 		updateChildren(root, domA, domB);

@@ -11,14 +11,17 @@ import {
 } from './types';
 
 
-export function updateChildren(parentNode: HTMLElement, oldChildren: any, newChildren: any): void {
+export function updateChildren(parentNode: HTMLElement, oldChildren: any, newChildren: any): Children {
 	const oldVNodes = normalizeChildren(ensureArray(oldChildren));
 	const newVNodes = normalizeChildren(ensureArray(newChildren));
 
 	updateChildrenInternal(parentNode, oldVNodes, newVNodes);
+
+	return newVNodes;
 }
 
 function updateChildrenInternal(parentNode: HTMLElement, oldChildren: Children, newChildren: Children): void {
+	//console.log('dift', oldChildren, newChildren);
 	diffList<VNode>(oldChildren, newChildren, (editType: number, old: VNode, next: VNode, index: number) => {
 		//console.log('listdiff', editType, old, next, index);
 		repositionNode(parentNode, editType, old, next, index);
@@ -43,21 +46,22 @@ function repositionNode(parentNode: HTMLElement, editType: number, oldVNode: VNo
 				createDomNode(newVNode),
 				indexNode
 			);
+			//console.log('CREATE', newVNode);
 			break;
 		case UPDATE:
-			//console.log('UPDATE', parentNode, index, indexNode)
+			//console.log('UPDATE', newVNode);
 			updateNode(indexNode, oldVNode, newVNode);
 			break;
 		case MOVE:
-			const oldNodeMove = parentNode.childNodes[oldVNode.index];
+			//console.log('MOVE', newVNode);
 			parentNode.insertBefore(
-				updateNode(oldNodeMove, oldVNode, newVNode),
+				updateNode(oldVNode.nodeRef, oldVNode, newVNode),
 				indexNode
 			);
 			break;
 		case REMOVE:
-			const oldNodeRemove = parentNode.childNodes[oldVNode.index];
-			parentNode.removeChild(oldNodeRemove);
+			//console.log('REMOVE', oldVNode);
+			parentNode.removeChild(oldVNode.nodeRef);
 			break;
 	}
 }
@@ -132,10 +136,13 @@ function removeProp(element: HTMLElement, name: string): void {
 
 function createDomNode(vnode: VNode, doc = document): Text | HTMLElement {
 	if(isVTextNode(vnode)) {
-		return doc.createTextNode(vnode.text);
+		const textNode = doc.createTextNode(vnode.text);
+		vnode.nodeRef = textNode;
+		return textNode;
 	}
 
 	const element = doc.createElement(vnode.name);
+	vnode.nodeRef = element;
 	updateProps(element, {}, vnode.props);
 	vnode.children
 		.map(vnode => createDomNode(vnode))
