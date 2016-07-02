@@ -47,8 +47,7 @@ const store = createStore((state = 0, {type, payload}) => {
 let previousRender = null;
 function render(state) {
 	const timeStr = new Date(state).toLocaleTimeString();
-	updateChildren(root, previousRender, [timeStr]);
-	previousRender = currentRender;
+	previousRender = updateChildren(root, previousRender, timeStr);
 }
 
 store.subscribe(() => render(store.getState()));
